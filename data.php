@@ -1,9 +1,9 @@
-<?php
+<?PHP
 
 try {
 
 	$db_conn = new PDO('sqlite:/home/maxim/code/php/lcms/phpliteadmin/lcms.sqlite');
-	//$db_conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+	$db_conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 
 } catch (PDOException $e) {
   
@@ -22,7 +22,7 @@ function get_page_name($db_conn) {
 	
 	$obj = $db_conn->query('SELECT "page_name" FROM "page" WHERE "page_menu" = 1');
 	$result = $obj->fetchAll();
-
+	
 	return $result;
 }
 
@@ -56,6 +56,14 @@ function get_mod_name($db_conn, $mod_id) {
 	$result = $obj->fetch();
 	
 	return $result['mod_name'];
+}
+
+function set_core_value($db_conn, $setting, $value) {
+
+	$sql = 'UPDATE "core" SET "core_value" = "' . $value . '" WHERE "core_setting" = "' . $setting . '"';
+	$rows = $db_conn->exec($sql);
+
+	return $rows;
 }
 
 //close connection
