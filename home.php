@@ -1,30 +1,41 @@
 <?PHP 
 
-include_once("data.php"); 
+include_once("data.php");
+
+$page = substr($_SERVER['PHP_SELF'], 1, -4); 
+
+$page_info = get_single_row($db_conn,'core','core_setting', 'title');
+$menu = get_many_rows($db_conn,"page", "page_menu", "1");
+$content = get_single_row($db_conn,"page", "page_name", $page);
+$mod_id_list = get_many_rows($db_conn,"modlink", "modlink_page", $content['page_id']);
 
 ?>
-
 <html>
 <head>
-<title><?PHP echo get_title($db_conn); ?></title>
+<title><?PHP print $page_info['core_value'] . "- $page"; ?></title>
 </head>
-<h1><?PHP echo get_title($db_conn); ?></h1>
+<h1><?PHP echo $page_info['core_value']; ?></h1>
 <ul>
 <?PHP
 
-$pages = get_page_name($db_conn);
+foreach($menu as $val) {
 
-foreach($pages as $val) {
-
-	echo "<li>" . $val['page_name'] . "</li>";
+	echo "<li><a href = '" . $val['page_name'] . ".php'>" . $val['page_name'] . "</a></li>\n";
 }
 
-$content = get_page_content($db_conn, 'home');
+?>
+</ul>
+<?PHP
 
-echo $content;
+echo $content['page_content'];
+
+foreach ($mod_id_list as $val) {
+	
+	$result = get_single_row($db_conn, "mod", "mod_id", $val['modlink_mod']);
+	$mod_name = $result['mod_name'];
+	include_once("mod/$mod_name/$mod_name.php");
+}
 
 ?>
-
-</ul>
 </html>
 

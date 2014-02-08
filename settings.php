@@ -1,41 +1,45 @@
 <?PHP 
 
 include_once("data.php");
+session_start();
 
-$page = substr($_SERVER['PHP_SELF'], 1, -4); 
+$file_name = substr($_SERVER['PHP_SELF'], 1, -4); 
 
-$title  = get_title($db_conn);
-$menu = get_page_name($db_conn);
-$content = get_page_content($db_conn, $page);
-$page_id = get_page_id($db_conn, $page);
-$mod_id_list = get_mod_id_list($db_conn, $page_id);
+$page_current = get_single_row($db_conn,'core','core_setting', 'title');
+$pages = get_many_rows($db_conn,"page", "page_menu", "0\" OR page_menu = \"1");//TODO: improve functions SQL generation
+$content = get_single_row($db_conn,"page", "page_name", $file_name);
+$mod_id_list = get_many_rows($db_conn,"modlink", "modlink_page", $content['page_id']);
+
 ?>
-
 <html>
 <head>
-<title><?PHP echo $title . " - " . $page; ?></title>
+<title><?PHP print $page_current['core_value'] . " - $file_name"; ?></title>
 </head>
-<h1><?PHP echo $title; ?></h1>
+<h1><?PHP echo $page_current['core_value']; ?></h1>
 <ul>
-
 <?PHP
-
-foreach($menu as $val) {
-
-	echo "<li><a href ='/". $val['page_name'] . ".php'>" . $val['page_name'] . "</a></li>\n";
+//nav menu
+foreach($pages as $val) {
+	
+	if ($val['page_menu']) {
+		
+		printf("<li><a href = '%s.php'>%s</a></li>\n", $val['page_name'], $val['page_name']);
+	}
 }
 
-echo $content;
+?>
+</ul>
+<?PHP
+
+echo $content['page_content'];
 
 foreach ($mod_id_list as $val) {
 	
-	$mod_name = get_mod_name($db_conn, $val['modlink_mod']);
-
+	$result = get_single_row($db_conn, "mod", "mod_id", $val['modlink_mod']);
+	$mod_name = $result['mod_name'];
 	include_once("mod/$mod_name/$mod_name.php");
 }
 
 ?>
-
-</ul>
 </html>
 
