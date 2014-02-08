@@ -23,6 +23,7 @@ function set_page_details($db_conn, $val1, $val2, $val3, $val4) {
 	if($val3) {
 		
 		$val3 = 1;
+
 	} else {
 		
 		$val3 = 0;
@@ -31,15 +32,17 @@ function set_page_details($db_conn, $val1, $val2, $val3, $val4) {
 	$sql = 'UPDATE "page" SET "page_name" = "'.$val1
 	.'", "page_content" = "'.$val2
 	.'", "page_menu" = "'.$val3.'" WHERE "page_id" = "'.$val4.'"';
-	
 	$rows = $db_conn->exec($sql);
+
 	return $rows;
 }
 
-function del_row() {
+function del_row($db_conn, $table, $key, $val) {
 	
-	$sql = '';
-
+	$sql = 'DELETE FROM "'.$table.'" WHERE "'.$key.'" = "'.$val.'"';
+	$rows = $db_conn->exec($sql);
+	
+	return $rows;
 }
 
 //close connection

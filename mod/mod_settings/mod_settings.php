@@ -40,6 +40,7 @@ foreach($pages as $val) {
 </ul>
 <label for = "">Options: </label>
 <input type = "submit" name = "edit_page" value = "Edit Page" /> 
+<input type = "submit" name = "delete_page" value = "Delete Page" /> 
 <input type = "submit" name = "create_page" value = "Create Page" /> 
 <br />
 <label for = "page_title"> Page Name: </label>
@@ -54,6 +55,29 @@ foreach($pages as $val) {
 
 if (isset($_GET['id'])) {
 	
+	if (isset($_POST['delete_page'])) {
+		
+		$result = del_row($db_conn, 'page', 'page_id', $content['page_id']);
+
+		if ($result) {
+			
+			$r = unlink($content['page_name'].".php");
+
+			if ($r) {
+				
+				echo "Page Delete: Successfull";
+			
+			} else {
+			
+				echo "Page Delete: Failed";
+			}
+
+		} else {
+		
+			echo "Page Delete: Failed (databse)";
+		}
+	}
+
 	//set databse row from $contents selected data
 	if (isset($_POST['edit_page'])) {
 			
@@ -105,7 +129,6 @@ if(isset($_POST['create_page'])) {
 	if($result) {
 		
 		$new_page = copy("home.php", $_POST['page_title'].".php");
-		echo $_SERVER["PHP_SELF"];
 		//copy unreliable return value
 		//can return 1 without copying file	
 		
@@ -138,6 +161,4 @@ if(isset($_POST['change_title'])) {
 	}
 }
 
-if (isset($_POST['delete_page'])) {
-}
 ?>
