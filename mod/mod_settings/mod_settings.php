@@ -1,11 +1,7 @@
 <?PHP 
 
-include_once("mod/mod_settings/mod_settings_data.php");
+include_once("mod/mod_settings/mod_settings_control.php");
 
-if (isset($_GET['id'])) {
-	//TODO: sanitise db input	
-	$content = get_single_row($db_conn, 'page', 'page_id', $_GET['id']);
-}
 ?>
 <p>
 <form name = "core_settings" action = "" method = "post">
@@ -53,96 +49,7 @@ foreach($pages as $val) {
 </p>
 <?PHP 
 
-if (isset($_GET['id'])) {
-	
-	if (isset($_POST['delete_page'])) {
-		
-		$result = del_row($db_conn, 'page', 'page_id', $content['page_id']);
-
-		if ($result) {
-			
-			$r = unlink($content['page_name'].".php");
-
-			if ($r) {
-				
-				echo "Page Delete: Successfull";
-			
-			} else {
-			
-				echo "Page Delete: Failed";
-			}
-
-		} else {
-		
-			echo "Page Delete: Failed (databse)";
-		}
-	}
-
-	//set databse row from $contents selected data
-	if (isset($_POST['edit_page'])) {
-			
-		$result = set_page_details($db_conn,
-					$_POST['page_title'],
-					$_POST['page_content'],
-					$_POST['page_menu'],
-					$content['page_id']);
-		if ($result) {
-		
-			//rename page file to its new name
-			$r = rename($content["page_name"].".php", $_POST['page_title'].".php");
-	
-			if($r) {
-				
-				echo "Page Details Updated: Succesfull";
-
-			} else {
-				
-				echo "Page Details Updated: Failed";
-				//TODO: roll back the changes in databse
-			}
-		}
-	}
-}
-//button press
-if(isset($_POST['create_page'])) {
-	
-	//new page input check
-	$a = array($_POST['page_title'], $_POST['page_content']);
-	
-	foreach($a as $val) {
-
-		if (preg_match("/^[a-z A-Z]+$/", $val) != 1) {
-		
-			die("enter txt feilds");
-		}
-	}
-
-	$menu = 0;
-		
-	if (isset($_POST['page_menu'])) {
-	
-		$menu = 1;
-	}
-	
-	$result = insert_page($db_conn, $_POST['page_title'], $_POST['page_content'], $menu);
-	
-	if($result) {
-		
-		$new_page = copy("home.php", $_POST['page_title'].".php");
-		//copy unreliable return value
-		//can return 1 without copying file	
-		
-		if($new_page) {
-			
-			echo "New Page Created: Successful";
-
-		} else {
-			
-			echo "New Page Created: Failed";
-			//roll back page database insert
-		}
-	}
-}
+echo $output;
 
 if(isset($_POST['change_title'])) {
 	
