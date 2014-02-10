@@ -1,0 +1,47 @@
+* {
+
+	padding: 0;
+	margin: 0;
+}
+
+body {
+	
+	background-color: #cccccc;
+	font-size: small;
+}
+
+#wrapper {
+
+	background-color: #fdf8f2;
+	margin:10px;
+	padding: 10px;
+}
+
+#header_menu {
+
+	border-top: 1px solid #000;
+	border-bottom: 1px solid #000;
+}
+
+#header_menu ul{
+	
+	float: right;
+}
+
+#header_menu li{
+	
+	color: #000;
+	display:inline
+}
+#content {
+
+	border: 1px solid #000;
+	background-color: white;
+	color: black;
+	padding: 10px;
+}
+
+#main {
+	
+	margin-top: 10px;
+}

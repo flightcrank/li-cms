@@ -1,30 +1,47 @@
 <?PHP 
 
-include_once("data.php");
-
-$page = substr($_SERVER['PHP_SELF'], 1, -4); 
-
-$page_info = get_single_row($db_conn,'core','core_setting', 'title');
-$menu = get_many_rows($db_conn,"page", "page_menu", "1");
-$content = get_single_row($db_conn,"page", "page_name", $page);
-$mod_id_list = get_many_rows($db_conn,"modlink", "modlink_page", $content['page_id']);
+include_once("control.php");
 
 ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html>
 <head>
-<title><?PHP print $page_info['core_value'] . "- $page"; ?></title>
+<title><?PHP print $page_current['core_value'] . " - $file_name"; ?></title>
+<link rel="stylesheet" type="text/css" href="theme/<?PHP echo $page_style['core_value']?>" />
+<link rel="stylesheet" type="text/css" href="<?PHP echo "mod/mod_settings/mod_settings.css"; ?>" />
 </head>
-<h1><?PHP echo $page_info['core_value']; ?></h1>
+<body>
+
+<div id="wrapper">
+
+<div id="header">
+<h1><?PHP echo $page_current['core_value']; ?></h1>
+<!--<img src="img/logo.gif" alt="Footbag Freaks" height="77" width="203" />-->
+
+<div id="header_menu">
+<?PHP echo $content['page_info']; ?>
 <ul>
 <?PHP
 
-foreach($menu as $val) {
-
-	echo "<li><a href = '" . $val['page_name'] . ".php'>" . $val['page_name'] . "</a></li>\n";
+//nav menu
+foreach($pages as $val) {
+	
+	if ($val['page_menu']) {
+		
+		printf("<li>| <a href = '%s.php'>%s</a></li>\n", $val['page_name'], $val['page_name']);
+	}
 }
 
 ?>
 </ul>
+</div><!-- header_menu -->
+
+</div><!-- header -->
+
+<div id="main">
+
+<div id="content">
 <?PHP
 
 echo $content['page_content'];
@@ -37,5 +54,12 @@ foreach ($mod_id_list as $val) {
 }
 
 ?>
+</div><!-- content -->
+
+</div><!-- main -->
+
+</div><!-- wrapper -->
+
+</body>
 </html>
 

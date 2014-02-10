@@ -3,7 +3,7 @@
 include_once("mod/mod_settings/mod_settings_data.php");
 
 $files = scandir("theme/");
-$output = "output: ";
+$output = ">>>";
 
 //gets run before the <form> to populate its feilds with databse values;
 if (isset($_GET['id'])) {
@@ -16,7 +16,7 @@ if (isset($_POST['edit_page'])) {
 
 	if (isset($_GET['id'])) {
 		
-		edit_page($db_conn,$_POST['page_title'],$_POST['page_content'],$_POST['page_menu'],$content['page_id']);
+		edit_page($db_conn,$_POST['page_title'],$_POST['page_content'],$_POST['page_info'],$_POST['page_menu'],$content['page_id']);
 		
 	} else {
 		
@@ -41,9 +41,31 @@ if (isset($_POST['create_page'])) {
 	create_page($db_conn, $_POST['page_title'], $_POST['page_content'], $_POST['page_menu']);
 }
 
-function edit_page($db_conn, $name, $content, $menu, $id) {
+if(isset($_POST['change_title'])) {
 	
-	$result = set_page_details($db_conn, $name, $content, $menu, $id);
+	change_title($db_conn, $_POST['core_title'], $_POST['core_style']);
+}
+
+function change_title($db_conn, $title, $style) {
+
+	$result = set_core_value($db_conn, "title", $title);
+
+	if ($result) {
+		
+		$GLOBALS['output'] =  "output: Title Update: Successfull";
+	}
+	
+	$result = set_core_value($db_conn, "style", $style);
+	
+	if ($result) {
+		
+		$GLOBALS['output'] =  "output: Style Update: Successfull";
+	}
+}
+
+function edit_page($db_conn, $name, $content, $info, $menu, $id) {
+	
+	$result = set_page_details($db_conn, $name, $content, $info, $menu, $id);
 
 	if ($result) {
 		
