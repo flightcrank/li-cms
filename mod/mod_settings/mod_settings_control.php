@@ -5,7 +5,7 @@ include_once("mod/mod_settings/mod_settings_data.php");
 $files = scandir("theme/");
 $output = ">>>";
 
-//gets run before the <form> to populate its feilds with databse values;
+//gets run before the HTML, to populate its feilds with databse values;
 if (isset($_GET['id'])) {
 	//TODO: sanitise db input	
 	$content = get_single_row($db_conn, 'page', 'page_id', $_GET['id']);
@@ -15,12 +15,35 @@ if (isset($_GET['id'])) {
 if (isset($_POST['edit_page'])) {
 
 	if (isset($_GET['id'])) {
+	
+		//Input Validation
+		$check = array($_POST['page_title'],$_POST['page_content'], $_POST['page_info']);
+		$valid = 0;
+
+		foreach($check as $val) {
 		
-		edit_page($db_conn,$_POST['page_title'],$_POST['page_content'],$_POST['page_info'],$_POST['page_menu'],$content['page_id']);
+			if (preg_match("/^[a-z A-Z]+$/", $val) == 1) {
+				
+				$valid++;
+			}
+		}
+
+		if ($valid == count($check)) {
+		
+			edit_page($db_conn,$_POST['page_title'], 
+					$_POST['page_content'],
+					$_POST['page_info'],
+					$_POST['page_menu'],
+					$content['page_id']);
+
+		} else {
+		
+			$output = "Input Validation: Failed";
+		}
 		
 	} else {
 		
-		$output = "output: Please select a page to edit first";
+		$output = "Please select a page";
 	}
 }
 
@@ -32,18 +55,47 @@ if (isset($_POST['delete_page'])) {
 	
 	} else {
 	
-		$output = "output: Please select page to delete.";
+		$output = "Please select a page";
 	}
 }
 
 if (isset($_POST['create_page'])) {
 	
-	create_page($db_conn, $_POST['page_title'], $_POST['page_content'], $_POST['page_menu']);
+	//new page input check
+	$check = array($_POST['page_title'], $_POST['page_content'], $_POST['page_info']);
+	$valid = 0;
+
+	foreach($check as $val) {
+			
+		if (preg_match("/^[a-z A-Z]+$/", $val) == 1) {
+			
+			$valid++;	
+		}
+	}
+	
+
+	if ($valid == count($check)) {
+		
+		create_page($db_conn, $_POST['page_title'], $_POST['page_content'], $_POST['page_info'], $_POST['page_menu']);
+	
+	} else {
+	
+		$output = "Input Validation: Failed";
+		var_dump($check);
+	}
 }
 
 if(isset($_POST['change_title'])) {
 	
-	change_title($db_conn, $_POST['core_title'], $_POST['core_style']);
+	//Input Validation
+	if (preg_match("/^[a-z A-Z]+$/", $_POST['core_title']) == 1) {
+		
+		change_title($db_conn, $_POST['core_title'], $_POST['core_style']);
+
+	} else {
+		
+		$output = "Input Validation: Failed";
+	}
 }
 
 function change_title($db_conn, $title, $style) {
@@ -52,14 +104,22 @@ function change_title($db_conn, $title, $style) {
 
 	if ($result) {
 		
-		$GLOBALS['output'] =  "output: Title Update: Successfull";
+		$GLOBALS['output'] =  "Title Update: Successfull";//TODO: This output will not be seen if second message
+								  // is sucessfull
+	} else {
+		
+		$GLOBALS['output'] =  "Title Update: Failed";
 	}
 	
 	$result = set_core_value($db_conn, "style", $style);
 	
 	if ($result) {
 		
-		$GLOBALS['output'] =  "output: Style Update: Successfull";
+		$GLOBALS['output'] =  "Style Update: Successfull";
+
+	} else {
+
+		$GLOBALS['output'] =  "Style Update: Failed";
 	}
 }
 
@@ -115,25 +175,12 @@ function delete_page($db_conn, $content) {
 }
 
 
-function create_page($db_conn, $page_name, $page_content, $menu) {
-	
-	//new page input check
-	$check = array($page_name, $page_content);
-	
-	foreach($check as $val) {
-		
-		if (preg_match("/^[a-z A-Z]+$/", $val) != 1) {
-			
-			$GLOBALS['output'] = "output: validation failed, try again.";
-			
-			return 0;
-		}
-	}
+function create_page($db_conn, $page_name, $page_content, $page_info, $menu) {
 	
 	//value for checkbox datase entry
 	$menu = ($menu == "on") ? 1 : 0;
 	
-	$result = insert_page($db_conn, $page_name, $page_content, $menu);
+	$result = insert_page($db_conn, $page_name, $page_content, $page_info, $menu);
 	
 	if ($result) {
 
@@ -142,17 +189,17 @@ function create_page($db_conn, $page_name, $page_content, $menu) {
 		
 		if($new_page) {
 			
-			$GLOBALS['output'] = "output: New Page Created: Successful";
+			$GLOBALS['output'] = "New Page Created: Successful";
 
 		} else {
 			
-			$GLOBALS['output'] =  "output: New Page Created: Failed (file operation)";
+			$GLOBALS['output'] =  "New Page Created: Failed (file operation)";
 			//TODO: roll back page database insert
 		}
 
 	} else {
 	
-		$GLOBALS['output'] =  "output: New Page Created: Failed (databse operation)";
+		$GLOBALS['output'] =  "New Page Created: Failed (databse operation)";
 	}
 }
 

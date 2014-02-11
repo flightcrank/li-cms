@@ -3,6 +3,7 @@
 include_once("mod/mod_settings/mod_settings_control.php");
 
 ?>
+<div id = "settings">
 <form name = "core_settings" action = "" method = "post">
 <fieldset>
 <legend>Core Settings</legend>
@@ -38,13 +39,17 @@ foreach($pages as $val) {
 ?>
 </ul>
 <label for = "page_title"> Page Name: </label>
-<input name = "page_title" type = "text" value = "<?PHP echo $content['page_name']; ?>" />
+<input name = "page_title" type = "text" value = "<?PHP if($_GET['id']){ echo $content['page_name'];} ?>" />
 <label for = "page_info"> Page Info: </label>
-<input name = "page_info" type = "text" value = "<?PHP echo $content['page_info']; ?>" />
+<input name = "page_info" type = "text" value = "<?PHP if($_GET['id']){ echo $content['page_info'];} ?>" />
+<br />
 <label for = "page_content"> Page description: </label>
-<input name = "page_content" type = "text" value = "<?PHP echo $content['page_content']; ?>" />
+<textarea name = "page_content" type = "text">
+<?PHP if($_GET['id']){ echo $content['page_content'];} ?>
+</textarea>
+<br />
 <label for = "page_menu"> Include In Menu: </label>
-<input name = "page_menu" type = "checkbox" />
+<input name = "page_menu" type = "checkbox" /><!--TODO: select check box when a valid GET id = is selected-->
 <br />
 <label for = "">Options: </label>
 <input type = "submit" name = "edit_page" value = "Edit Page" /> 
@@ -58,3 +63,4 @@ foreach($pages as $val) {
 ?>
 </fieldset><!--output-->
 </form>
+</div><!--settings-->
