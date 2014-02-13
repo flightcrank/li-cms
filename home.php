@@ -7,7 +7,7 @@ include_once("control.php");
 "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html>
 <head>
-<title><?PHP print $page_current['core_value'] . " - $file_name"; ?></title>
+<title><?PHP print $page_current['core_value'] . " - $page"; ?></title>
 <link rel="stylesheet" type="text/css" href="theme/<?PHP echo $page_style['core_value']?>" />
 <link rel="stylesheet" type="text/css" href="<?PHP echo "mod/mod_settings/mod_settings.css"; ?>" />
 </head>
@@ -29,7 +29,7 @@ foreach($pages as $val) {
 	
 	if ($val['page_menu']) {
 		
-		printf("<li>| <a href = '%s.php'>%s</a></li>\n", $val['page_name'], $val['page_name']);
+		printf("<li>| <a href = 'home.php?page=%s'>%s</a></li>\n", $val['page_name'] ,$val['page_name']);
 	}
 }
 

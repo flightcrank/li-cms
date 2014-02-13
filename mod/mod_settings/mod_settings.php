@@ -33,7 +33,10 @@ foreach ($files as $val) {
 
 foreach($pages as $val) {
 		
-	printf( "<li>%s <a href='%s?id=%s'>select</a>", $val['page_name'], $_SERVER['PHP_SELF'], $val['page_id']);
+	printf( "<li>%s <a href='%s?page=%s&id=%s'>select</a>", $val['page_name'], 
+								$SERVER['PHP_SELF'],
+								$page,
+								$val['page_id']);
 }
 
 ?>
