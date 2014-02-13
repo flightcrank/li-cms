@@ -3,7 +3,7 @@
 include_once("mod/mod_settings/mod_settings_data.php");
 
 $files = scandir("theme/");
-$output = ">>>";
+$output = array();
 
 //gets run before the HTML, to populate its feilds with databse values;
 if (isset($_GET['id'])) {
@@ -38,12 +38,12 @@ if (isset($_POST['edit_page'])) {
 
 		} else {
 		
-			$output = "Input Validation: Failed";
+			$output[] = "Input Validation: Failed";
 		}
 		
 	} else {
 		
-		$output = "Please select a page";
+		$output[] = "Please select a page";
 	}
 }
 
@@ -55,13 +55,13 @@ if (isset($_POST['delete_page'])) {
 	
 	} else {
 	
-		$output = "Please select a page";
+		$output[] = "Please select a page";
 	}
 }
 
 if (isset($_POST['create_page'])) {
 	
-	//new page input check
+	//Input Validation
 	$check = array($_POST['page_title'], $_POST['page_content'], $_POST['page_info']);
 	$valid = 0;
 
@@ -80,7 +80,7 @@ if (isset($_POST['create_page'])) {
 	
 	} else {
 	
-		$output = "Input Validation: Failed";
+		$output[] = "Input Validation: Failed";
 		var_dump($check);
 	}
 }
@@ -94,7 +94,7 @@ if(isset($_POST['change_title'])) {
 
 	} else {
 		
-		$output = "Input Validation: Failed";
+		$output[] = "Input Validation: Failed";
 	}
 }
 
@@ -104,22 +104,22 @@ function change_title($db_conn, $title, $style) {
 
 	if ($result) {
 		
-		$GLOBALS['output'] =  "Title Update: Successfull";//TODO: This output will not be seen if second message
+		$GLOBALS['output'][] =  "Title Update: Successfull";//TODO: This output will not be seen if second message
 								  // is sucessfull
 	} else {
 		
-		$GLOBALS['output'] =  "Title Update: Failed";
+		$GLOBALS['output'][] =  "Title Update: Failed";
 	}
 	
 	$result = set_core_value($db_conn, "style", $style);
 	
 	if ($result) {
 		
-		$GLOBALS['output'] =  "Style Update: Successfull";
+		$GLOBALS['output'][] =  "Style Update: Successfull";
 
 	} else {
 
-		$GLOBALS['output'] =  "Style Update: Failed";
+		$GLOBALS['output'][] =  "Style Update: Failed";
 	}
 }
 
@@ -135,17 +135,17 @@ function edit_page($db_conn, $name, $content, $info, $menu, $id) {
 		
 		if($r) {
 			
-			$GLOBALS['output'] = "output: Page Details Updated: Succesfull";
+			$GLOBALS['output'][] = "output: Page Details Updated: Succesfull";
 		
 		} else {
 		
-			$GLOBALS['output'] =  "output: Page Details Updated: Failed (file operation)";
+			$GLOBALS['output'][] =  "output: Page Details Updated: Failed (file operation)";
 			//TODO: rollback databse operation
 		}
 
 	} else {
 		
-		$GLOBALS['output'] =  "output: Page Details Updated: Failed (database operation)";
+		$GLOBALS['output'][] =  "output: Page Details Updated: Failed (database operation)";
 	}
 }
 
@@ -160,17 +160,17 @@ function delete_page($db_conn, $content) {
 
 			if ($r) {
 				
-				$GLOBALS['output'] = "output: Page Delete: Successfull";
+				$GLOBALS['output'][] = "output: Page Delete: Successfull";
 			
 			} else {
 			
-				$GLOBALS['output'] = "output: Page Delete: Failed (file operation)";
+				$GLOBALS['output'][] = "output: Page Delete: Failed (file operation)";
 				//TODO: rollback databse operation
 			}
 
 		} else {
 		
-			$GLOBALS['output'] = "output: Page Delete: Failed (databse operation)";
+			$GLOBALS['output'][] = "output: Page Delete: Failed (databse operation)";
 		}
 }
 
@@ -189,17 +189,17 @@ function create_page($db_conn, $page_name, $page_content, $page_info, $menu) {
 		
 		if($new_page) {
 			
-			$GLOBALS['output'] = "New Page Created: Successful";
+			$GLOBALS['output'][] = "New Page Created: Successful";
 
 		} else {
 			
-			$GLOBALS['output'] =  "New Page Created: Failed (file operation)";
+			$GLOBALS['output'][] =  "New Page Created: Failed (file operation)";
 			//TODO: roll back page database insert
 		}
 
 	} else {
 	
-		$GLOBALS['output'] =  "New Page Created: Failed (databse operation)";
+		$GLOBALS['output'][] =  "New Page Created: Failed (databse operation)";
 	}
 }
 

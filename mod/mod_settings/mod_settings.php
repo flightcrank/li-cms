@@ -38,28 +38,37 @@ foreach($pages as $val) {
 
 ?>
 </ul>
+<ul>
+<li>
 <label for = "page_title"> Page Name: </label>
 <input name = "page_title" type = "text" value = "<?PHP if($_GET['id']){ echo $content['page_name'];} ?>" />
+</li>
+<li>
 <label for = "page_info"> Page Info: </label>
 <input name = "page_info" type = "text" value = "<?PHP if($_GET['id']){ echo $content['page_info'];} ?>" />
-<br />
+</li>
+<li>
 <label for = "page_content"> Page description: </label>
 <textarea name = "page_content" type = "text">
 <?PHP if($_GET['id']){ echo $content['page_content'];} ?>
 </textarea>
-<br />
+</li>
+<li>
 <label for = "page_menu"> Include In Menu: </label>
 <input name = "page_menu" type = "checkbox" /><!--TODO: select check box when a valid GET id = is selected-->
-<br />
+</li>
+<li>
 <label for = "">Options: </label>
 <input type = "submit" name = "edit_page" value = "Edit Page" /> 
 <input type = "submit" name = "delete_page" value = "Delete Page" /> 
 <input type = "submit" name = "create_page" value = "Create Page" /> 
+</li>
+</ul>
 </fieldset><!--page settings-->
 <fieldset>
 <legend>Output</legend>
 <?PHP 
-	echo $output; 
+	echo print_r($output); 
 ?>
 </fieldset><!--output-->
 </form>
