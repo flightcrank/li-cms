@@ -9,7 +9,7 @@ include_once("control.php");
 <head>
 <title><?PHP print $page_current['core_value'] . " - $page"; ?></title>
 <link rel="stylesheet" type="text/css" href="theme/<?PHP echo $page_style['core_value']?>" />
-<link rel="stylesheet" type="text/css" href="<?PHP echo "mod/mod_settings/mod_settings.css"; ?>" />
+<link rel="stylesheet" type="text/css" href="<?PHP echo "theme/mod_settings.css"; ?>" />
 </head>
 <body>
 
@@ -17,7 +17,7 @@ include_once("control.php");
 
 <div id="header">
 <h1><?PHP echo $page_current['core_value']; ?></h1>
-<!--<img src="img/logo.gif" alt="Footbag Freaks" height="77" width="203" />-->
+<!--<img src="img/logo.gif" alt="" height="77" width="203" />-->
 
 <div id="header_menu">
 <?PHP echo $content['page_info']; ?>
@@ -45,12 +45,13 @@ foreach($pages as $val) {
 <?PHP
 
 echo $content['page_content'];
+print_r($output);
 
 foreach ($mod_id_list as $val) {
 	
 	$result = get_single_row($db_conn, "mod", "mod_id", $val['modlink_mod']);
 	$mod_name = $result['mod_name'];
-	include_once("mod/$mod_name/$mod_name.php");
+	include_once("output/$mod_name.php");
 }
 
 ?>

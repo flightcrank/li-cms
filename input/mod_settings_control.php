@@ -1,6 +1,6 @@
 <?PHP
 
-include_once("mod/mod_settings/mod_settings_data.php");
+include_once("data/mod_settings_data.php");
 
 $files = scandir("theme/");
 $output = array();
@@ -72,11 +72,13 @@ if (isset($_POST['create_page'])) {
 			$valid++;	
 		}
 	}
-	
 
 	if ($valid == count($check)) {
 		
-		create_page($db_conn, $_POST['page_title'], $_POST['page_content'], $_POST['page_info'], $_POST['page_menu']);
+		create_page($db_conn, $_POST['page_title'], 
+				      $_POST['page_content'], 
+				      $_POST['page_info'], 
+				      $_POST['page_menu']);
 	
 	} else {
 	
@@ -104,8 +106,8 @@ function change_title($db_conn, $title, $style) {
 
 	if ($result) {
 		
-		$GLOBALS['output'][] =  "Title Update: Successfull";//TODO: This output will not be seen if second message
-								  // is sucessfull
+		$GLOBALS['output'][] =  "Title Update: Successfull";
+
 	} else {
 		
 		$GLOBALS['output'][] =  "Title Update: Failed";
@@ -128,21 +130,9 @@ function edit_page($db_conn, $name, $content, $info, $menu, $id) {
 	$result = set_page_details($db_conn, $name, $content, $info, $menu, $id);
 
 	if ($result) {
-		
-		//TODO: fix error when it trys to rename the file
-		//when the page name remains unchanged
-		$r = rename($content["page_name"].".php", $_POST['page_title'].".php");
-		
-		if($r) {
 			
-			$GLOBALS['output'][] = "output: Page Details Updated: Succesfull";
+		$GLOBALS['output'][] = "output: Page Details Updated: Succesfull";
 		
-		} else {
-		
-			$GLOBALS['output'][] =  "output: Page Details Updated: Failed (file operation)";
-			//TODO: rollback databse operation
-		}
-
 	} else {
 		
 		$GLOBALS['output'][] =  "output: Page Details Updated: Failed (database operation)";
@@ -153,27 +143,15 @@ function delete_page($db_conn, $content) {
 
 	$result = del_row($db_conn, 'page', 'page_id', $content['page_id']);
 
-		if ($result) {
+	if ($result) {
 			
-			//delete page file
-			$r = unlink($content['page_name'].".php");
+		$GLOBALS['output'][] = "output: Page Delete: Successfull";
 
-			if ($r) {
-				
-				$GLOBALS['output'][] = "output: Page Delete: Successfull";
-			
-			} else {
-			
-				$GLOBALS['output'][] = "output: Page Delete: Failed (file operation)";
-				//TODO: rollback databse operation
-			}
-
-		} else {
+	} else {
 		
-			$GLOBALS['output'][] = "output: Page Delete: Failed (databse operation)";
-		}
+		$GLOBALS['output'][] = "output: Page Delete: Failed (databse operation)";
+	}
 }
-
 
 function create_page($db_conn, $page_name, $page_content, $page_info, $menu) {
 	
@@ -183,19 +161,8 @@ function create_page($db_conn, $page_name, $page_content, $page_info, $menu) {
 	$result = insert_page($db_conn, $page_name, $page_content, $page_info, $menu);
 	
 	if ($result) {
-
-		$new_page = copy("home.php", $page_name.".php");
-		//TODO: find solution if 'home' page is deleted from database
 		
-		if($new_page) {
-			
-			$GLOBALS['output'][] = "New Page Created: Successful";
-
-		} else {
-			
-			$GLOBALS['output'][] =  "New Page Created: Failed (file operation)";
-			//TODO: roll back page database insert
-		}
+		$GLOBALS['output'][] = "New Page Created: Successful";
 
 	} else {
 	

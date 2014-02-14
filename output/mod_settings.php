@@ -1,12 +1,14 @@
 <?PHP 
 
-include_once("mod/mod_settings/mod_settings_control.php");
+include_once("input/mod_settings_control.php");
 
 ?>
 <div id = "settings">
 <form name = "core_settings" action = "" method = "post">
 <fieldset>
 <legend>Core Settings</legend>
+<ul>
+<li>
 <label for = "core_style"> Style: </label>
 <select name = "core_style"> 
 <?PHP
@@ -21,22 +23,29 @@ foreach ($files as $val) {
 
 ?>
 </select>
+</li>
+<li>
 <label for = "core_title"> Title: </label>
 <input name = "core_title" type = "text" value ="<?PHP echo $page_current['core_value'];?>"/>
-<input type = "submit" name = "change_title" value = "Save Changes" />
+</li>
+<li> 
+<button type = "submit" name = "change_title">Save Changes</button>
+</li>
 </fieldset> <!--core settings-->
 <fieldset>
 <legend>Page Settings</legend>
-<label> Select Page: </label>
 <ul>
+<li>
+<label> Select Page: </label>
+</li>
 <?PHP
 
 foreach($pages as $val) {
 		
-	printf( "<li>%s <a href='%s?page=%s&id=%s'>select</a>", $val['page_name'], 
-								$SERVER['PHP_SELF'],
-								$page,
-								$val['page_id']);
+	printf( "<li class ='page_list'><label>%s</label> <a href='%s?page=%s&id=%s'>select</a></li>", $val['page_name'], 
+												$SERVER['PHP_SELF'],
+												$page,
+												$val['page_id']);
 }
 
 ?>

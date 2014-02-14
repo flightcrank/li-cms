@@ -1,0 +1,29 @@
+
+fieldset {
+
+	padding: 10px;
+	background-color:rgb(224, 235, 246);
+}
+
+fieldset li{
+
+	list-style:none;
+	clear:both;
+}
+
+fieldset label{
+	
+	width: 140px;
+	float: left;
+}
+
+.page_list label {
+
+	width: 110px;
+}
+
+.page_list {
+	
+	margin-left: 30px;
+	list-style: square;
+}
