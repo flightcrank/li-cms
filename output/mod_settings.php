@@ -66,6 +66,23 @@ foreach($pages as $val) {
 </textarea>
 </li>
 <li>
+<label for = "page_view"> Page View: </label>
+<select name = "page_view" >
+<?PHP
+
+foreach($views as $val) {
+	
+	if (preg_match("/.php$/", $val) == 1) {
+	
+		print "<option value='$val'> $val </option>\n";
+	}
+
+}
+
+?>
+</select>
+</li>
+<li>
 <label for = "page_menu"> Include In Menu: </label>
 <input name = "page_menu" type = "checkbox" /><!--TODO: select check box when a valid GET id = is selected-->
 </li>
@@ -77,6 +94,10 @@ foreach($pages as $val) {
 </li>
 </ul>
 </fieldset><!--page settings-->
+<fieldset>
+<legend>Mod List</legend>
+
+</fieldset><!--Mods-->
 <fieldset>
 <legend>Output</legend>
 <?PHP 

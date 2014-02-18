@@ -1,7 +1,7 @@
 <?PHP
 
 //databse function for core site
-include_once("data.php");
+include_once("data/data.php");
 
 //the current page the user is on
 $page = NULL;

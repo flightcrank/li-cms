@@ -3,7 +3,7 @@
 include_once("data/mod_settings_data.php");
 
 $files = scandir("theme/");
-$output = array();
+$views = scandir("output/");
 
 //gets run before the HTML, to populate its feilds with databse values;
 if (isset($_GET['id'])) {
@@ -33,6 +33,7 @@ if (isset($_POST['edit_page'])) {
 			edit_page($db_conn,$_POST['page_title'], 
 					$_POST['page_content'],
 					$_POST['page_info'],
+					$_POST['page_view'],
 					$_POST['page_menu'],
 					$content['page_id']);
 
@@ -78,6 +79,7 @@ if (isset($_POST['create_page'])) {
 		create_page($db_conn, $_POST['page_title'], 
 				      $_POST['page_content'], 
 				      $_POST['page_info'], 
+				      $_POST['page_view'], 
 				      $_POST['page_menu']);
 	
 	} else {
@@ -125,9 +127,9 @@ function change_title($db_conn, $title, $style) {
 	}
 }
 
-function edit_page($db_conn, $name, $content, $info, $menu, $id) {
+function edit_page($db_conn, $name, $content, $info, $view, $menu, $id) {
 	
-	$result = set_page_details($db_conn, $name, $content, $info, $menu, $id);
+	$result = set_page_details($db_conn, $name, $content, $info, $view, $menu, $id);
 
 	if ($result) {
 			
@@ -153,12 +155,12 @@ function delete_page($db_conn, $content) {
 	}
 }
 
-function create_page($db_conn, $page_name, $page_content, $page_info, $menu) {
+function create_page($db_conn, $page_name, $page_content, $page_info, $view, $menu) {
 	
 	//value for checkbox datase entry
 	$menu = ($menu == "on") ? 1 : 0;
 	
-	$result = insert_page($db_conn, $page_name, $page_content, $page_info, $menu);
+	$result = insert_page($db_conn, $page_name, $page_content, $page_info, $view, $menu);
 	
 	if ($result) {
 		

@@ -9,6 +9,8 @@ fieldset li{
 
 	list-style:none;
 	clear:both;
+	margin-top: 5px;
+	margin-bottom: 5px;
 }
 
 fieldset label{
@@ -25,5 +27,7 @@ fieldset label{
 .page_list {
 	
 	margin-left: 30px;
+	margin-top: 0;
+	margin-bottom: 0;
 	list-style: square;
 }

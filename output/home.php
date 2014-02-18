@@ -1,8 +1,3 @@
-<?PHP 
-
-include_once("control.php");
-
-?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
 "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html>
@@ -29,7 +24,9 @@ foreach($pages as $val) {
 	
 	if ($val['page_menu']) {
 		
-		printf("<li>| <a href = 'home.php?page=%s'>%s</a></li>\n", $val['page_name'] ,$val['page_name']);
+		printf("<li>| <a href = '%s?page=%s'>%s</a></li>\n",$SERVER['PHP_SELF'],
+								$val['page_name'],
+								$val['page_name']);
 	}
 }
 
