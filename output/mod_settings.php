@@ -84,8 +84,52 @@ foreach($views as $val) {
 </li>
 <li>
 <label for = "page_menu"> Include In Menu: </label>
-<input name = "page_menu" type = "checkbox" /><!--TODO: select check box when a valid GET id = is selected-->
+<?PHP
+
+if ($_GET['id'] && $content['page_menu']) {
+
+	echo "<input name = 'page_menu' type = 'checkbox' checked = 'checked'/>";
+
+} else {
+	
+	echo "<input name = 'page_menu' type = 'checkbox' />";
+}
+
+?>
 </li>
+<li>
+<label for = "page_mods"> Mod List: </label>
+</li>
+<?PHP 
+
+foreach($mod_list as $val) {
+
+	$res = FALSE;
+	
+	//Search for match of which mods are enabled on the selected page for editing.
+	foreach($mod_id_list as $val2) {
+		
+		if($val['mod_id'] == $val2['modlink_mod']) {
+			
+			$res = TRUE;
+			break;
+		}
+	}
+
+	echo "<li class = 'page_list'><label for = '" . $val['mod_name'] . "'>" . $val['mod_name']."</label>\n";
+	
+	if($res) {
+		
+		echo "<input name = '".$val['mod_name']."' type = 'checkbox' checked = 'checked'/></li>\n";
+
+	} else {
+		
+		echo "<input name = '".$val['mod_name']."' type = 'checkbox'/></li>\n";
+	}
+	
+}
+
+?>
 <li>
 <label for = "">Options: </label>
 <input type = "submit" name = "edit_page" value = "Edit Page" /> 
@@ -95,13 +139,9 @@ foreach($views as $val) {
 </ul>
 </fieldset><!--page settings-->
 <fieldset>
-<legend>Mod List</legend>
-
-</fieldset><!--Mods-->
-<fieldset>
 <legend>Output</legend>
 <?PHP 
-	echo print_r($output); 
+	print_r($output); 
 ?>
 </fieldset><!--output-->
 </form>

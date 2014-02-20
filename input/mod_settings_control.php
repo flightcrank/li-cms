@@ -7,12 +7,24 @@ $views = scandir("output/");
 
 //gets run before the HTML, to populate its feilds with databse values;
 if (isset($_GET['id'])) {
-	//TODO: sanitise db input	
+	
+	//TODO: sanitise ALL db input	
 	$content = get_single_row($db_conn, 'page', 'page_id', $_GET['id']);
+	$mod_list = get_many_rows($db_conn, 'mod');
+
+	//Re-populate an array of values in modlink table based ont the GET page id
+	$mod_id_list = get_many_rows($db_conn,"modlink", "modlink_page", $_GET['id']);
+
+	if ($mod_id_list == FALSE) {
+	
+		$output[] = "Could not load mod_id_list for page_id";
+	}
 }
 
 //Submit button actions
 if (isset($_POST['edit_page'])) {
+	
+	print_r($_POST['test']);
 
 	if (isset($_GET['id'])) {
 	

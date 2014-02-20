@@ -18,9 +18,20 @@ function get_single_row($db_conn,$table, $key, $val) {
 	return $result;
 }
 
-function get_many_rows($db_conn,$table, $key, $val) {
+function get_many_rows($db_conn, $table, $key = 0, $val = 0) {
 	
-	$sql = 'SELECT * FROM "' . $table . '" WHERE "' . $key . '" = "' . $val . '"';
+	$sql = NULL;
+
+	if ($key == 0 && $val == 0) {
+		
+		$sql = "SELECT * FROM  '$table'";
+	
+	} else {
+	
+		$sql = 'SELECT * FROM "' . $table . '" WHERE "' . $key . '" = "' . $val . '"';
+	
+	}
+
 	$obj = $db_conn->query($sql);
 	$result = $obj->fetchAll();
 	

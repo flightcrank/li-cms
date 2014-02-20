@@ -42,7 +42,6 @@ foreach($pages as $val) {
 <?PHP
 
 echo $content['page_content'];
-print_r($output);
 
 foreach ($mod_id_list as $val) {
 	
