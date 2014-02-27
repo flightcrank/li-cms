@@ -43,11 +43,9 @@ foreach($pages as $val) {
 
 echo $content['page_content'];
 
-foreach ($mod_id_list as $val) {
+foreach ($mods as $val) {
 	
-	$result = get_single_row($db_conn, "mod", "mod_id", $val['modlink_mod']);
-	$mod_name = $result['mod_name'];
-	include_once("output/$mod_name.php");
+	include_once("output/$val.php");
 }
 
 ?>

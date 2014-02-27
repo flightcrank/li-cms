@@ -97,7 +97,6 @@ if (isset($_POST['create_page'])) {
 	} else {
 	
 		$output[] = "Input Validation: Failed";
-		var_dump($check);
 	}
 }
 

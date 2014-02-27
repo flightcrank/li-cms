@@ -120,11 +120,11 @@ foreach($mod_list as $val) {
 	
 	if($res) {
 		
-		echo "<input name = '".$val['mod_name']."' type = 'checkbox' checked = 'checked'/></li>\n";
+		echo "<input name = 'test[]' type = 'checkbox' checked = 'checked'/></li>\n";
 
 	} else {
 		
-		echo "<input name = '".$val['mod_name']."' type = 'checkbox'/></li>\n";
+		echo "<input name = 'test[]' type = 'checkbox'/></li>\n";
 	}
 	
 }
