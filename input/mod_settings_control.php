@@ -24,8 +24,6 @@ if (isset($_GET['id'])) {
 //Submit button actions
 if (isset($_POST['edit_page'])) {
 	
-	print_r($_POST['test']);
-
 	if (isset($_GET['id'])) {
 	
 		//Input Validation
@@ -53,6 +51,27 @@ if (isset($_POST['edit_page'])) {
 		
 			$output[] = "Input Validation: Failed";
 		}
+
+		//mod_link edit
+		
+		//remove all previous mods the selected page is connected too
+		delete_mod_link($db_conn,$content);
+		
+		//loop through enabled checkboxs and add each one to the mod_link table for the selected page
+		foreach($_POST['test'] as $val) {
+			
+			$result = create_modlink($db_conn, $val, $content['page_id']);
+
+			if ($result) {
+
+				$output[] = "Modlink Created for page_id:".$content['page_id'];
+			
+			} else {
+			
+				$output[] = "Modlink Failed for page_id". $content['page_id'];
+			}
+		}
+		
 		
 	} else {
 		
@@ -149,6 +168,20 @@ function edit_page($db_conn, $name, $content, $info, $view, $menu, $id) {
 	} else {
 		
 		$GLOBALS['output'][] =  "output: Page Details Updated: Failed (database operation)";
+	}
+}
+
+function delete_mod_link($db_conn, $content) {
+
+	$result = del_row($db_conn, 'modlink', 'modlink_page', $content['page_id']);
+
+	if ($result) {
+			
+		$GLOBALS['output'][] = "output: mod_link Delete: Successfull";
+
+	} else {
+		
+		$GLOBALS['output'][] = "output: mod_link Delete: Failed (databse operation)";
 	}
 }
 

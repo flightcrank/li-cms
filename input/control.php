@@ -48,9 +48,10 @@ if ($content == FALSE) {
 	$output[] = "Could not load page: $page";
 }
 
-//Array of values in modlink table including the mod_id's that are link to this page
+//Array of values in modlink table including the mod_id's that the current page uses
 $mod_id_list = get_many_rows($db_conn,"modlink", "modlink_page", $content['page_id']);
 
+//list of mod names used on the current page, used to include the mods output file in the current page
 $mods = array();
 
 if ($mod_id_list == FALSE) {

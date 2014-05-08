@@ -76,7 +76,6 @@ foreach($views as $val) {
 	
 		print "<option value='$val'> $val </option>\n";
 	}
-
 }
 
 ?>
@@ -109,7 +108,7 @@ foreach($mod_list as $val) {
 	//Search for match of which mods are enabled on the selected page for editing.
 	foreach($mod_id_list as $val2) {
 		
-		if($val['mod_id'] == $val2['modlink_mod']) {
+		if ($val['mod_id'] == $val2['modlink_mod']) {
 			
 			$res = TRUE;
 			break;
@@ -120,13 +119,12 @@ foreach($mod_list as $val) {
 	
 	if($res) {
 		
-		echo "<input name = 'test[]' type = 'checkbox' checked = 'checked'/></li>\n";
+		echo "<input name = 'test[]' type = 'checkbox' value = '" . $val['mod_id'] . "' checked = 'checked'/></li>\n";
 
 	} else {
 		
-		echo "<input name = 'test[]' type = 'checkbox'/></li>\n";
+		echo "<input name='test[]' type='checkbox' value = '" . $val['mod_id'] . "'/></li>\n";
 	}
-	
 }
 
 ?>

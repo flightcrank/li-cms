@@ -43,6 +43,7 @@ foreach($pages as $val) {
 
 echo $content['page_content'];
 
+//only one instance of each mod allowed due to include_once(). include() will add the same mod more than once
 foreach ($mods as $val) {
 	
 	include_once("output/$val.php");

@@ -35,6 +35,14 @@ function set_page_details($db_conn, $name, $content, $info, $view, $menu, $id) {
 	return $rows;
 }
 
+function create_modlink($db_conn, $mod_id, $page_id) {
+
+	$sql = 'INSERT INTO "modlink" ("modlink_mod", "modlink_page") VALUES ("'.$mod_id.'", "'.$page_id.'")';
+	$rows = $db_conn->exec($sql);
+
+	return $rows;
+}
+
 function del_row($db_conn, $table, $key, $val) {
 	
 	$sql = 'DELETE FROM "'.$table.'" WHERE "'.$key.'" = "'.$val.'"';

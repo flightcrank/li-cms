@@ -1,4 +1,5 @@
 <?PHP
+
 try {
 
 	$db_conn = new PDO('sqlite:/home/maxim/code/php/lcms/phpliteadmin/lcms.sqlite');
@@ -9,7 +10,7 @@ try {
   	echo 'Connection failed: ' . $e->getMessage();
 }
 
-function get_single_row($db_conn,$table, $key, $val) {
+function get_single_row($db_conn, $table, $key, $val) {
 	
 	$sql = 'SELECT * FROM "' . $table . '" WHERE "' . $key . '" = "' . $val . '"';
 	$obj = $db_conn->query($sql);
@@ -29,7 +30,6 @@ function get_many_rows($db_conn, $table, $key = 0, $val = 0) {
 	} else {
 	
 		$sql = 'SELECT * FROM "' . $table . '" WHERE "' . $key . '" = "' . $val . '"';
-	
 	}
 
 	$obj = $db_conn->query($sql);
