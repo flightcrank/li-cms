@@ -31,7 +31,7 @@ function get_many_rows($db_conn, $table, $key = 0, $val = 0) {
 	
 		$sql = 'SELECT * FROM "' . $table . '" WHERE "' . $key . '" = "' . $val . '"';
 	}
-
+	
 	$obj = $db_conn->query($sql);
 	$result = $obj->fetchAll();
 	

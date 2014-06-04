@@ -25,7 +25,7 @@ if (isset($_GET['id'])) {
 if (isset($_POST['edit_page'])) {
 	
 	if (isset($_GET['id'])) {
-	
+		
 		//Input Validation
 		$check = array($_POST['page_title'],$_POST['page_content'], $_POST['page_info']);
 		$valid = 0;
@@ -52,9 +52,7 @@ if (isset($_POST['edit_page'])) {
 			$output[] = "Input Validation: Failed";
 		}
 
-		//mod_link edit
-		
-		//remove all previous mods the selected page is connected too
+		//remove all mods the selected page is connected too
 		delete_mod_link($db_conn,$content);
 		
 		//loop through enabled checkboxs and add each one to the mod_link table for the selected page
@@ -71,7 +69,6 @@ if (isset($_POST['edit_page'])) {
 				$output[] = "Modlink Failed for page_id". $content['page_id'];
 			}
 		}
-		
 		
 	} else {
 		
@@ -124,7 +121,7 @@ if(isset($_POST['change_title'])) {
 	//Input Validation
 	if (preg_match("/^[a-z A-Z]+$/", $_POST['core_title']) == 1) {
 		
-		change_title($db_conn, $_POST['core_title'], $_POST['core_style']);
+		change_title($db_conn, $_POST['core_title']);
 
 	} else {
 		
@@ -132,7 +129,21 @@ if(isset($_POST['change_title'])) {
 	}
 }
 
-function change_title($db_conn, $title, $style) {
+if (isset($_POST['add_style'])) {
+
+	$result = insert_style($db_conn, $_POST['style_name']);
+
+	if ($result) {
+	
+		$GLOBALS['output'][] = "Add Style: Sucessfull";
+
+	} else {
+	
+		$GLOBALS['output'][] = "Add Style: Failed (databse input)";
+	}
+}
+
+function change_title($db_conn, $title) {
 
 	$result = set_core_value($db_conn, "title", $title);
 
@@ -143,17 +154,6 @@ function change_title($db_conn, $title, $style) {
 	} else {
 		
 		$GLOBALS['output'][] =  "Title Update: Failed";
-	}
-	
-	$result = set_core_value($db_conn, "style", $style);
-	
-	if ($result) {
-		
-		$GLOBALS['output'][] =  "Style Update: Successfull";
-
-	} else {
-
-		$GLOBALS['output'][] =  "Style Update: Failed";
 	}
 }
 

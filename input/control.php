@@ -1,6 +1,6 @@
 <?PHP
 
-//the current page the user is on
+//String of the current page the user is on
 $page = NULL;
 
 //array to out put any errors or message to the current page
@@ -24,14 +24,6 @@ if ($page_current == FALSE) {
 	$output[] = "Core Title Value: Failure (databse operation)";
 }
 
-//String filename of the CSS file to use for styling
-$page_style = get_single_row($db_conn, 'core', 'core_setting', 'style');
-
-if ($page_style == FALSE) {
-	
-	$output[] ="Could not load current site style sheet";
-}
-
 //Array of the pages to be used for the main menu AND settings list
 $pages = get_many_rows($db_conn,"page", "page_menu", "0\" OR page_menu = \"1");//TODO: improve functions SQL generation
 
@@ -40,12 +32,43 @@ if ($pages == FALSE) {
 	$output[] = "Could not load menu list items";
 }
 
-//Array of page content stored for the current page
+//Array of ALL the page content stored for the current page
 $content = get_single_row($db_conn,"page", "page_name", $page);
 
 if ($content == FALSE) {
 	
 	$output[] = "Could not load page: $page";
+}
+
+//Array ALL entrys from the style_link table that match the current page_id value
+$page_styles = get_many_rows($db_conn, 'style_link', 'page_id', $content['page_id']);
+
+//string of all the CSS filenames associated with the current page
+$style_names = array();
+
+if ($page_styles == FALSE) {
+	
+	$output[] ="Could not load style_id's from the database";
+
+//success
+} else {
+	
+	//loop through all the syles associated with the current page
+	foreach($page_styles as $val) {
+		
+		$row = get_single_row($db_conn, "style", "style_id", $val['style_id']);
+
+		if ($row == FALSE) {
+
+			$output[] = "Could not retrive style file name/s from database";
+			break;//exit out of loop so error message isnt printed many times
+	
+		//success
+		} else {
+		
+			$style_names[] = $row['style_name'];
+		}
+	}
 }
 
 //Array of values in modlink table including the mod_id's that the current page uses

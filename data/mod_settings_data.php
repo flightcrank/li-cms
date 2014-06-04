@@ -16,7 +16,15 @@ function insert_page($db_conn, $name, $content, $info, $view, $menu) {
 				$info . '" , "' .
 				$view . '" ,' .
 				$menu .')';
-	echo $sql;	
+	
+	$rows = $db_conn->exec($sql);
+	return $rows;
+}
+
+function insert_style($db_conn, $name) {
+	
+	$sql = 'INSERT INTO "style" ("style_name") VALUES ("'.$name.'")';
+
 	$rows = $db_conn->exec($sql);
 	return $rows;
 }

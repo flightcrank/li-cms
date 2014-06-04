@@ -3,8 +3,15 @@
 <html>
 <head>
 <title><?PHP print $page_current['core_value'] . " - $page"; ?></title>
-<link rel="stylesheet" type="text/css" href="theme/<?PHP echo $page_style['core_value']?>" />
-<link rel="stylesheet" type="text/css" href="<?PHP echo "theme/mod_settings.css"; ?>" />
+
+<?PHP
+//print all the style sheets associated with the current page
+foreach($style_names as $val) {
+	
+	echo '<link rel="stylesheet" type="text/css" href="theme/'.$val.'"/>'."\n";
+}
+?>
+
 </head>
 <body>
 
@@ -12,7 +19,6 @@
 
 <div id="header">
 <h1><?PHP echo $page_current['core_value']; ?></h1>
-<!--<img src="img/logo.gif" alt="" height="77" width="203" />-->
 
 <div id="header_menu">
 <?PHP echo $content['page_info']; ?>
