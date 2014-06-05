@@ -5,19 +5,30 @@ include_once("data/mod_settings_data.php");
 $files = scandir("theme/");
 $views = scandir("output/");
 
-//gets run before the HTML, to populate its feilds with databse values;
+//gets run before the mod's HTML, to populate its feilds with databse values;
 if (isset($_GET['id'])) {
 	
-	//TODO: sanitise ALL db input	
-	$content = get_single_row($db_conn, 'page', 'page_id', $_GET['id']);
-	$mod_list = get_many_rows($db_conn, 'mod');
+	//make sure the "id" query string value is only a number from 0-9 
+	if (preg_match("/^[0-9]+$/", $_GET['id']) == 1) {
+		
+		$content = get_single_row($db_conn, 'page', 'page_id', $_GET['id']);
+		$mod_list = get_many_rows($db_conn, 'mod');
 
-	//Re-populate an array of values in modlink table based ont the GET page id
-	$mod_id_list = get_many_rows($db_conn,"modlink", "modlink_page", $_GET['id']);
-
-	if ($mod_id_list == FALSE) {
+		//Re-populate an array of values in modlink table based ont the GET page id
+		$mod_id_list = get_many_rows($db_conn,"modlink", "modlink_page", $_GET['id']);
 	
-		$output[] = "Could not load mod_id_list for page_id";
+		if ($content == FALSE || $mod_id_list == FALSE) {
+	
+			$output[] = "Could not load page_id ".$_GET['id'];
+		}
+	
+	} else {
+
+		//the query stings id value is not a numner 0-9. It is unset to ensure that other functions 
+		//that rely on it being set properly ar not effected
+		unset($_GET['id']);
+		
+		$output[] = "Validation failed: Invalid id ".$_GET['id'];
 	}
 }
 

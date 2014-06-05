@@ -1,5 +1,6 @@
 <?PHP 
 
+//controller file for this mod is run before any html output
 include_once("input/mod_settings_control.php");
 
 ?>
