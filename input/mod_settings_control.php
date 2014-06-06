@@ -5,7 +5,26 @@ include_once("data/mod_settings_data.php");
 $files = scandir("theme/");
 $views = scandir("output/");
 
-//gets run before the mod's HTML, to populate its feilds with databse values;
+$settings_css_files = array();
+$settings_view_files = array();
+
+foreach($views as $val) {
+	
+	if (preg_match("/.php$/", $val) == 1) {
+		
+		$settings_view_files[] = $val;
+	}
+}
+
+foreach($files as $val) {
+	
+	if (preg_match("/.css$/", $val) == 1) {
+		
+		$settings_css_files[] = $val;
+	}
+}
+
+//gets run before the mod's HTML, to populate its fields with databse values;
 if (isset($_GET['id'])) {
 	
 	//make sure the "id" query string value is only a number from 0-9 
@@ -14,18 +33,23 @@ if (isset($_GET['id'])) {
 		$content = get_single_row($db_conn, 'page', 'page_id', $_GET['id']);
 		$mod_list = get_many_rows($db_conn, 'mod');
 
-		//Re-populate an array of values in modlink table based ont the GET page id
-		$mod_id_list = get_many_rows($db_conn,"modlink", "modlink_page", $_GET['id']);
+		//populate an array with all the values in modlink table based on the current page's id
+		$settings_mod_ids = get_many_rows($db_conn,"modlink", "modlink_page", $_GET['id']);
 	
-		if ($content == FALSE || $mod_id_list == FALSE) {
+		if ($content == FALSE || $settings_mod_ids == FALSE) {
 	
 			$output[] = "Could not load page_id ".$_GET['id'];
 		}
-	
+		
+		if ($mod_list == FALSE) {
+		
+			$output[] = "Could not full list of all mods from database";
+		}
+
 	} else {
 
 		//the query stings id value is not a numner 0-9. It is unset to ensure that other functions 
-		//that rely on it being set properly ar not effected
+		//that rely on it being set properly are not effected
 		unset($_GET['id']);
 		
 		$output[] = "Validation failed: Invalid id ".$_GET['id'];
@@ -146,11 +170,11 @@ if (isset($_POST['add_style'])) {
 
 	if ($result) {
 	
-		$GLOBALS['output'][] = "Add Style: Sucessfull";
+		$output[] = "Add Style: Sucessfull";
 
 	} else {
 	
-		$GLOBALS['output'][] = "Add Style: Failed (databse input)";
+		$output[] = "Add Style: Failed (databse input)";
 	}
 }
 
@@ -225,6 +249,20 @@ function create_page($db_conn, $page_name, $page_content, $page_info, $view, $me
 	
 		$GLOBALS['output'][] =  "New Page Created: Failed (databse operation)";
 	}
+}
+
+//Search for match of which mods are enabled on the selected page for editing.
+function mod_enabled($mod_id, $array) {
+
+	foreach($array as $val) {
+	
+		if ($mod_id == $val['modlink_mod']) {
+			
+			return TRUE;
+		}
+	}
+	
+	return FALSE;
 }
 
 ?>

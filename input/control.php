@@ -1,9 +1,15 @@
 <?PHP
+/*
+
+	Master Controller, all pages have this file included so its variables are available to all other files
+
+*/
+
 
 //String of the current page the user is on
 $page = NULL;
 
-//array to out put any errors or message to the current page
+//Global scope array to out put any errors or messages all pages
 $output = array();
 
 //make sure page has a value
@@ -50,7 +56,6 @@ if ($page_styles == FALSE) {
 	
 	$output[] ="Could not load style_id's from the database";
 
-//success
 } else {
 	
 	//loop through all the syles associated with the current page
@@ -63,7 +68,6 @@ if ($page_styles == FALSE) {
 			$output[] = "Could not retrive style file name/s from database";
 			break;//exit out of loop so error message isnt printed many times
 	
-		//success
 		} else {
 		
 			$style_names[] = $row['style_name'];

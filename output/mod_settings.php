@@ -13,15 +13,14 @@ include_once("input/mod_settings_control.php");
 <ul>
 <li>
 <label for = "style_name"> Style: </label><select name = "style_name"> 
-<?PHP
-foreach ($files as $val) {
 
-	if (preg_match("/.css$/", $val) == 1) {
-		
-		print "<option value='$val'> $val </option>\n";
-	}
+<?PHP
+foreach ($settings_css_files as $val) {
+
+	print "<option value='$val'> $val </option>\n";
 }
 ?>
+
 </select>
 </li>
 
@@ -51,7 +50,7 @@ foreach ($files as $val) {
 foreach($pages as $val) {
 		
 	printf( "<li class ='page_list'><label>%s</label> <a href='%s?page=%s&id=%s'>select</a></li>", $val['page_name'], 
-												$SERVER['PHP_SELF'],
+												$_SERVER['PHP_SELF'],
 												$page,
 												$val['page_id']);
 }
@@ -71,9 +70,7 @@ foreach($pages as $val) {
 <li>
 <label for = "page_content"> Page description: </label>
 <textarea name = "page_content" type = "text">
-
 <?PHP if($_GET['id']){ echo $content['page_content'];} ?>
-
 </textarea>
 </li>
 
@@ -82,15 +79,10 @@ foreach($pages as $val) {
 <select name = "page_view" >
 
 <?PHP
-
-foreach($views as $val) {
+foreach($settings_view_files as $val) {
 	
-	if (preg_match("/.php$/", $val) == 1) {
-	
-		print "<option value='$val'> $val </option>\n";
-	}
+	print "<option value='$val'> $val </option>\n";
 }
-
 ?>
 
 </select>
@@ -99,21 +91,20 @@ foreach($views as $val) {
 <li>
 <label for = "page_style">Page Style: </label>
 <select name = "page_style" >
+
 <?PHP
+foreach ($settings_css_files as $val) {
 
-foreach ($files as $val) {
-
-	if (preg_match("/.css$/", $val) == 1) {
-		
 		print "<option value='$val'> $val </option>\n";
-	}
 }
 ?>
+
 </select>
 </li>
 
 <li>
 <label for = "page_menu"> Include In Menu: </label>
+
 <?PHP
 if ($_GET['id'] && $content['page_menu']) {
 
@@ -124,30 +115,21 @@ if ($_GET['id'] && $content['page_menu']) {
 	echo "<input name = 'page_menu' type = 'checkbox' />";
 }
 ?>
+
 </li>
 
 <li>
 <label for = "page_mods"> Mod List: </label>
 </li>
 
-<?PHP 
+<?PHP
 foreach($mod_list as $val) {
-
-	$res = FALSE;
 	
-	//Search for match of which mods are enabled on the selected page for editing.
-	foreach($mod_id_list as $val2) {
-		
-		if ($val['mod_id'] == $val2['modlink_mod']) {
-			
-			$res = TRUE;
-			break;
-		}
-	}
-
 	echo "<li class = 'page_list'><label for = '" . $val['mod_name'] . "'>" . $val['mod_name']."</label>\n";
 	
-	if($res) {
+	$result = mod_enabled($val['mod_id'], $settings_mod_ids);
+	
+	if($result) {
 		
 		echo "<input name = 'test[]' type = 'checkbox' value = '" . $val['mod_id'] . "' checked = 'checked'/></li>\n";
 
